@@ -2,12 +2,11 @@ package controller
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
-	"reflect"
 	"strconv"
 
 	"github.com/restBoard/api/domain"
+	"github.com/restBoard/api/util"
 
 	"github.com/gorilla/mux"
 	"github.com/restBoard/api/apierror"
@@ -17,7 +16,6 @@ import (
 func HandleCreatePosting(res http.ResponseWriter, req *http.Request) {
 	postingRequest := domain.PostingRequest{}
 	err := json.NewDecoder(req.Body).Decode(&postingRequest)
-	fmt.Println(reflect.TypeOf(err))
 	if err != nil {
 		apierror.HandleErrorResponse(res, apierror.ErrInvalidInput())
 		return
@@ -27,10 +25,7 @@ func HandleCreatePosting(res http.ResponseWriter, req *http.Request) {
 		apierror.HandleErrorResponse(res, apierror.BuildErrorResponse(err))
 		return
 	}
-	createdPostingJson, _ := json.Marshal(postingResponse)
-	res.Header().Set("Content-Type", "application/json")
-	res.WriteHeader(http.StatusOK)
-	res.Write(createdPostingJson)
+	util.WriteResponse(res, postingResponse, http.StatusOK)
 }
 
 func HandleDetailPosting(res http.ResponseWriter, req *http.Request) {
@@ -46,11 +41,7 @@ func HandleDetailPosting(res http.ResponseWriter, req *http.Request) {
 		apierror.HandleErrorResponse(res, apierror.BuildErrorResponse(err))
 		return
 	}
-	// TODO : Response 생성 공통화
-	createdPostingJson, _ := json.Marshal(postingResponse)
-	res.Header().Set("Content-Type", "application/json")
-	res.WriteHeader(http.StatusOK)
-	res.Write(createdPostingJson)
+	util.WriteResponse(res, postingResponse, http.StatusOK)
 }
 
 func HandleListPosting(res http.ResponseWriter, req *http.Request) {
@@ -59,10 +50,7 @@ func HandleListPosting(res http.ResponseWriter, req *http.Request) {
 		apierror.HandleErrorResponse(res, apierror.BuildErrorResponse(err))
 		return
 	}
-	createdPostingJson, _ := json.Marshal(postingResponseList)
-	res.Header().Set("Content-Type", "application/json")
-	res.WriteHeader(http.StatusOK)
-	res.Write(createdPostingJson)
+	util.WriteResponse(res, postingResponseList, http.StatusOK)
 }
 
 func HandleUpdatePosting(res http.ResponseWriter, req *http.Request) {
@@ -88,10 +76,7 @@ func HandleUpdatePosting(res http.ResponseWriter, req *http.Request) {
 	}
 
 	// Make response
-	createdPostingJson, _ := json.Marshal(postingResponse)
-	res.Header().Set("Content-Type", "application/json")
-	res.WriteHeader(http.StatusOK)
-	res.Write(createdPostingJson)
+	util.WriteResponse(res, postingResponse, http.StatusOK)
 }
 
 func HandleDeletePosting(res http.ResponseWriter, req *http.Request) {
@@ -107,5 +92,5 @@ func HandleDeletePosting(res http.ResponseWriter, req *http.Request) {
 		apierror.HandleErrorResponse(res, apierror.BuildErrorResponse(err))
 		return
 	}
-	res.WriteHeader(http.StatusOK)
+	util.WriteResponse(res, nil, http.StatusOK)
 }

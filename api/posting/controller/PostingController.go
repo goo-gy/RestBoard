@@ -2,9 +2,12 @@ package controller
 
 import (
 	"encoding/json"
-	"github.com/restBoard/api/posting/domain"
+	"fmt"
 	"net/http"
+	"reflect"
 	"strconv"
+
+	"github.com/restBoard/api/posting/domain"
 
 	"github.com/gorilla/mux"
 	"github.com/restBoard/api/posting/apierror"
@@ -14,13 +17,14 @@ import (
 func HandleCreatePosting(res http.ResponseWriter, req *http.Request) {
 	postingRequest := domain.PostingRequest{}
 	err := json.NewDecoder(req.Body).Decode(&postingRequest)
+	fmt.Println(reflect.TypeOf(err))
 	if err != nil {
-		apierror.HandleError(res, apierror.ErrInvalidInput())
+		apierror.HandleErrorResponse(res, apierror.ErrInvalidInput())
 		return
 	}
 	postingResponse, err := service.CreatePosting(postingRequest)
 	if err != nil {
-		apierror.HandleError(res, apierror.BuildError(err))
+		apierror.HandleErrorResponse(res, apierror.BuildErrorResponse(err))
 		return
 	}
 	createdPostingJson, _ := json.Marshal(postingResponse)
@@ -33,13 +37,13 @@ func HandleDetailPosting(res http.ResponseWriter, req *http.Request) {
 	pathVariables := mux.Vars(req)
 	postingId, err := strconv.ParseInt(pathVariables["postingId"], 10, 64)
 	if err != nil {
-		apierror.HandleError(res, apierror.ErrInvalidInput())
+		apierror.HandleErrorResponse(res, apierror.ErrInvalidInput())
 		return
 	}
 
 	postingResponse, err := service.DetailPosting(postingId)
 	if err != nil {
-		apierror.HandleError(res, apierror.BuildError(err))
+		apierror.HandleErrorResponse(res, apierror.BuildErrorResponse(err))
 		return
 	}
 	// TODO : Response 생성 공통화
@@ -52,7 +56,7 @@ func HandleDetailPosting(res http.ResponseWriter, req *http.Request) {
 func HandleListPosting(res http.ResponseWriter, req *http.Request) {
 	postingResponseList, err := service.ListPosting()
 	if err != nil {
-		apierror.HandleError(res, apierror.BuildError(err))
+		apierror.HandleErrorResponse(res, apierror.BuildErrorResponse(err))
 		return
 	}
 	createdPostingJson, _ := json.Marshal(postingResponseList)
@@ -66,20 +70,20 @@ func HandleUpdatePosting(res http.ResponseWriter, req *http.Request) {
 	pathVariables := mux.Vars(req)
 	postingId, err := strconv.ParseInt(pathVariables["postingId"], 10, 64)
 	if err != nil {
-		apierror.HandleError(res, apierror.ErrInvalidInput())
+		apierror.HandleErrorResponse(res, apierror.ErrInvalidInput())
 		return
 	}
 	postingRequest := domain.PostingRequest{}
 	err = json.NewDecoder(req.Body).Decode(&postingRequest)
 	if err != nil {
-		apierror.HandleError(res, apierror.ErrInvalidInput())
+		apierror.HandleErrorResponse(res, apierror.ErrInvalidInput())
 		return
 	}
 
 	// Do updates
 	postingResponse, err := service.UpdatePosting(postingId, postingRequest)
 	if err != nil {
-		apierror.HandleError(res, apierror.BuildError(err))
+		apierror.HandleErrorResponse(res, apierror.BuildErrorResponse(err))
 		return
 	}
 
@@ -94,13 +98,13 @@ func HandleDeletePosting(res http.ResponseWriter, req *http.Request) {
 	pathVariables := mux.Vars(req)
 	postingId, err := strconv.ParseInt(pathVariables["postingId"], 10, 64)
 	if err != nil {
-		apierror.HandleError(res, apierror.ErrInvalidInput())
+		apierror.HandleErrorResponse(res, apierror.ErrInvalidInput())
 		return
 	}
 
 	err = service.DeletePosting(postingId)
 	if err != nil {
-		apierror.HandleError(res, apierror.BuildError(err))
+		apierror.HandleErrorResponse(res, apierror.BuildErrorResponse(err))
 		return
 	}
 	res.WriteHeader(http.StatusOK)

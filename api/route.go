@@ -2,7 +2,7 @@ package api
 
 import (
 	"github.com/gorilla/mux"
-	"github.com/restBoard/api/posting/controller"
+	"github.com/restBoard/api/controller"
 )
 
 func NewRouter() *mux.Router {

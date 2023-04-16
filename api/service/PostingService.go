@@ -1,8 +1,8 @@
 package service
 
 import (
-	"github.com/restBoard/api/posting/domain"
-	"github.com/restBoard/api/posting/repository"
+	"github.com/restBoard/api/domain"
+	"github.com/restBoard/api/repository"
 )
 
 func CreatePosting(postingRequest domain.PostingRequest) (domain.PostingResponse, error) {

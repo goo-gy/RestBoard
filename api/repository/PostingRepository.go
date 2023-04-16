@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"github.com/restBoard/api/posting/domain"
+	"github.com/restBoard/api/domain"
 	"github.com/restBoard/database"
 )
 

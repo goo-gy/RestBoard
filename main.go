@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/restBoard/api"
 	"net/http"
+
+	"github.com/restBoard/api"
 )
 
 func main() {

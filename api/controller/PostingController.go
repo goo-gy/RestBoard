@@ -7,11 +7,11 @@ import (
 	"reflect"
 	"strconv"
 
-	"github.com/restBoard/api/posting/domain"
+	"github.com/restBoard/api/domain"
 
 	"github.com/gorilla/mux"
-	"github.com/restBoard/api/posting/apierror"
-	"github.com/restBoard/api/posting/service"
+	"github.com/restBoard/api/apierror"
+	"github.com/restBoard/api/service"
 )
 
 func HandleCreatePosting(res http.ResponseWriter, req *http.Request) {

@@ -2,7 +2,8 @@ package database
 
 import (
 	"fmt"
-	"github.com/restBoard/api/posting/domain"
+
+	"github.com/restBoard/api/domain"
 	"github.com/restBoard/config"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

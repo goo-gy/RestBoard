@@ -7,6 +7,11 @@ import (
 )
 
 func HandleErrorResponse(res http.ResponseWriter, err error) {
-	errorResponse := errorMap[err.Error()]
-	util.WriteResponse(res, errorResponse.ErrorBody, errorResponse.Status)
+	errorResponse, exists := errorMap[err.Error()]
+	if(exists) {
+		util.WriteResponse(res, errorResponse.ErrorBody, errorResponse.Status)
+	} else {
+		errorResponse = errorMap["X-500"]
+		util.WriteResponse(res, errorResponse.ErrorBody, errorResponse.Status)
+	}
 }

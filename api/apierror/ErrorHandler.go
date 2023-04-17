@@ -1,17 +1,15 @@
 package apierror
 
 import (
-	"encoding/json"
 	"errors"
 	"net/http"
 
+	"github.com/restBoard/api/util"
 	"gorm.io/gorm"
 )
 
 func HandleErrorResponse(res http.ResponseWriter, errorResponse ErrorResponse) {
-	errorJson, _ := json.Marshal(errorResponse.ErrorBody)
-	res.WriteHeader(errorResponse.Status)
-	res.Write(errorJson)
+	util.WriteResponse(res, errorResponse.ErrorBody, errorResponse.Status)
 }
 
 func BuildErrorResponse(err error) ErrorResponse {

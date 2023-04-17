@@ -32,6 +32,7 @@ func UpdatePosting(postingId int64, postingRequest domain.PostingRequest) (domai
 }
 
 func DeletePostingById(postingId int64) error {
+	// Not Found 처리
 	result := database.Db.Delete(&domain.Posting{}, postingId)
 	return result.Error
 }

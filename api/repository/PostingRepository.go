@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"github.com/restBoard/api/apierror"
 	"github.com/restBoard/api/domain"
 	"github.com/restBoard/database"
 )
@@ -13,7 +14,10 @@ func SavePosting(posting domain.Posting) (domain.Posting, error) {
 func FindPostingById(postingId int64) (domain.Posting, error) {
 	posting := domain.Posting{}
 	result := database.Db.First(&posting, postingId)
-	return posting, result.Error
+	if(result.Error != nil) {
+		return posting, apierror.ErrPostingNotExist{}
+	}
+	return posting, nil
 }
 
 func FindAllPosting() ([]domain.Posting, error) {
@@ -25,6 +29,9 @@ func FindAllPosting() ([]domain.Posting, error) {
 func UpdatePosting(postingId int64, postingRequest domain.PostingRequest) (domain.Posting, error) {
 	posting := domain.Posting{}
 	result := database.Db.First(&posting, postingId)
+	if(result.Error != nil) {
+		return posting, apierror.ErrPostingNotExist{}
+	}
 	posting.Title = postingRequest.Title
 	posting.Content = postingRequest.Content
 	database.Db.Save(&posting)
@@ -32,7 +39,11 @@ func UpdatePosting(postingId int64, postingRequest domain.PostingRequest) (domai
 }
 
 func DeletePostingById(postingId int64) error {
-	// Not Found 처리
+	posting := domain.Posting{}
+	findResult := database.Db.First(&posting, postingId)
+	if(findResult.Error != nil) {
+		return apierror.ErrPostingNotExist{}
+	}
 	result := database.Db.Delete(&domain.Posting{}, postingId)
 	return result.Error
 }
